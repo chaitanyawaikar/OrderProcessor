@@ -7,6 +7,13 @@ case class Customer(timeAtWhichPizzaOrdered: Int, timeTakenToPreparePizza: Int)
 
 object OrderProcessor {
 
+  def main(args: Array[String]): Unit = {
+    process(System.in) match {
+      case Right(waitingTime) => println(waitingTime)
+      case Left(errorMessage) => println(errorMessage)
+    }
+  }
+
   def process(in: InputStream): Either[String, Long] = {
     readInputFromConsole(System.in) match {
       case Right(list) =>
@@ -15,16 +22,8 @@ object OrderProcessor {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    process(System.in) match {
-      case Right(waitingTime) => println(waitingTime)
-      case Left(errorMessage) => println(errorMessage)
-    }
-  }
-
   def readInputFromConsole(in: InputStream): Either[Throwable, ArrayBuffer[Customer]] = {
     val bufferedReader = new BufferedReader(new InputStreamReader(in))
-
     Try {
       val noOfCustomers = bufferedReader.readLine().toInt
       val arrayBuffer = ArrayBuffer[Customer]()
@@ -45,7 +44,6 @@ object OrderProcessor {
       b.timeTakenToPreparePizza compare a.timeTakenToPreparePizza
     }
   }
-
 
   def calculateAverageWaitingTime(customers: ArrayBuffer[Customer]): Long = {
     val noOfCustomers = customers.size
